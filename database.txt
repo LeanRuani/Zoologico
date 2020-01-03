@@ -1,0 +1,201 @@
+CREATE database zoologico;
+USE zoologico;
+
+CREATE TABLE alimentos (
+id INT AUTO_INCREMENT,
+nombre VARCHAR(30),
+kg INT,
+f_vencimiento DATE,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE visitas (
+id INT AUTO_INCREMENT,
+id_zona INT,
+fecha DATE,
+costo FLOAT,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE animales_alimentos(
+id INT AUTO_INCREMENT,
+id_animal INT,
+id_alimento INT,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE zonas (
+id INT AUTO_INCREMENT,
+id_especie INT,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE animales (
+id INT AUTO_INCREMENT,
+id_especie INT,
+nombre VARCHAR(20),
+sexo ENUM('macho','hembra'),
+f_nacimiento DATE,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE especies (
+id INT AUTO_INCREMENT,
+id_cuidador INT,
+nombre VARCHAR(20),
+descripcion TEXT,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE cuidadores (
+id INT AUTO_INCREMENT,
+nombre VARCHAR(35),
+edad INT,
+PRIMARY KEY (id)
+);
+
+ALTER TABLE animales 
+ADD INDEX fk_animales_especies(id_especie),
+ADD CONSTRAINT fk_animales_especies
+FOREIGN KEY (id_especie)
+REFERENCES especies(id);
+
+ALTER TABLE animales_alimentos
+ADD INDEX fk_animales_alimentos_animales (id_animal),
+ADD CONSTRAINT fk_animales_alimentos_animales
+FOREIGN KEY (id_animal)
+REFERENCES animales(id);
+
+ALTER TABLE animales_alimentos
+ADD INDEX fk_animales_alimentos_alimentos (id_alimento),
+ADD CONSTRAINT fk_animales_alimentos_alimentos
+FOREIGN KEY (id_alimento)
+REFERENCES alimentos(id);
+
+ALTER TABLE especies
+ADD INDEX fk_especies_cuidadores(id_cuidador),
+ADD CONSTRAINT fk_especies_cuidadores
+FOREIGN KEY (id_cuidador)
+REFERENCES cuidadores(id);
+
+ALTER TABLE zonas
+ADD INDEX fk_zonas_especies(id_especie),
+ADD CONSTRAINT fk_zonas_especies
+FOREIGN KEY (id_especie)
+REFERENCES especies(id);
+
+ALTER TABLE visitas
+ADD INDEX fk_visitas_zonas(id_zona),
+ADD CONSTRAINT fk_visitas_zonas
+FOREIGN KEY (id_zona)
+REFERENCES zonas(id);
+
+INSERT INTO alimentos 
+(nombre,kg,f_vencimiento) VALUES
+('Carne',450,'2014-12-30'),
+('Frutas',514,'2014-10-16'),
+('Semillas',192,'2014-01-24'),
+('Vegetales',239,'2014-09-23'),
+('Insectos',124, '2014-08-01'),
+('Especial acuaticos',124,'2014-04-21')
+;
+
+INSERT INTO cuidadores
+(nombre, edad) VALUES
+('jose', 44),
+('perez', 35),
+('alejandro', 33),
+('gabriel', 66),
+('bruno', 40)
+;
+
+INSERT INTO especies
+(id_cuidador,nombre,descripcion) VALUES
+(2,'herbivoro','este tipo de animales son los que se alimenta de plantas o vegetales y que no comen carne'),
+(5,'carnivoros','son todos aquellos animales que basan su alimentación en la carne, la cual la extraen de otros animales'),
+(4,'omnivoros','este tipo de animales comen tanto plantas y vegetales como carne'),
+(1,'acuaticos','son los animales que viven y desarrollan sus actividades en ambientes acuáticos, especialmente el mar'),
+(3,'anfibios','este tipo de animales son especiales, ya que pueden vivir sin problemas tanto en la tierra como en el agua')
+;
+
+INSERT INTO animales
+(id_especie,nombre,sexo,f_nacimiento) VALUES
+(1,'pedro','macho','2012-01-01'),
+(1,'sol','hembra','2010-03-03'),
+(1,'manuel','macho','2008-12-23'),
+(2,'anna','hembra','2013-03-21'),
+(2,'emma','hembra','2012-12-01'),
+(5,'agustino','macho','2011-04-04'),
+(5,'marcelo','macho','2013-06-15'),
+(5,'marcela','hembra','2013-07-16'),
+(4,'oscar','macho','2011-02-23'),
+(4,'nemo','macho','2013-11-12'),
+(4,'analia','hembra','2010-08-21'),
+(4,'paco','macho','2013-10-10'),
+(3,'loma','hembra','2009-12-30'),
+(3,'tratu','macho','2010-05-18'),
+(3,'morci','hembra','2010-10-21'),
+(3,'caccatua','macho','2013-07-12')
+;
+
+INSERT INTO animales_alimentos
+(id_animal, id_alimento)VALUES
+(1,4),	
+(1,2),
+(2,4),
+(3,3),
+(3,2),
+(4,1),
+(4,2),
+(5,1),
+(6,2),
+(6,4),
+(7,6),
+(7,1),
+(8,3),
+(9,3),
+(9,5),
+(10,6),
+(11,6),
+(11,3),
+(12,5),
+(13,1),
+(13,4),
+(13,2),
+(14,3),
+(14,1),
+(15,4),
+(15,1),
+(16,3),
+(16,2),
+(16,1)
+;
+
+
+INSERT INTO zonas
+(id_especie) VALUES
+(4),
+(3),
+(1),
+(2),
+(5),
+(1),
+(3),
+(5),
+(1),
+(4)
+;
+
+INSERT INTO visitas
+(id_zona, fecha, costo) VALUES
+(9, '2014-04-01', 100),
+(8, '2014-04-10', 105),
+(7, '2014-04-15', 110),
+(1, '2014-04-25', 115),
+(2, '2014-05-01', 120),
+(3, '2014-05-10', 125),
+(5, '2014-05-25', 130),
+(6, '2014-06-10', 135),
+(10, '2014-06-15', 140),
+(4, '2014-06-25', 145)
+;
